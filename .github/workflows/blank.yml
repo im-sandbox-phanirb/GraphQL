@@ -1,0 +1,41 @@
+name: GraphQL
+on:
+  workflow_dispatch:
+    inputs:
+      org-name:
+        description: 'Enter the Organization Name'
+        required: true
+      repo-name:
+        description: 'Enter the repository name'
+        required: true
+    
+jobs:
+  graph-ql:
+    runs-on: ubuntu-latest
+    steps:
+      - name: graph ql 
+        run: |
+          QUERY=$(query {
+              repository(owner: "${{ inputs.org-name }}", name: "${{ inputs.repo-name }}") {
+                name
+                description
+                homepageUrl
+                hasIssuesEnabled
+                hasWikiEnabled
+                hasProjectsEnabled
+                isArchived
+                isTemplate
+                licenseInfo {
+                  name
+                  spdxId
+                }
+                defaultBranchRef {
+                  name
+                }
+              }
+            })
+
+          curl -X POST -H "Authorization: bearer ${{ secrets.MY_SECRETS }}" -d "$QUERY" https://api.github.com/graphql
+        
+    
+  
