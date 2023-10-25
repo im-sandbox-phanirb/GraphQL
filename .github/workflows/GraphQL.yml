@@ -16,7 +16,7 @@ jobs:
       - name: graph ql 
         run: |
           QUERY=$(query {
-              repository(owner: "${{ inputs.org-name }}", name: "${{ inputs.repo-name }}") {
+              repository(owner: ${{ inputs.org-name }}, name: ${{ inputs.repo-name }}) {
                 name
                 description
                 homepageUrl
