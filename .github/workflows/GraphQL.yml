@@ -15,8 +15,7 @@ jobs:
     steps:
       - name: Set up environment variables
         run: |
-          echo "QUERY=$(cat <<EOF
-          query {
+          QUERY=$(query {
             repository(owner: \${{ inputs.org-name }}, name: \${{ inputs.repo-name }}) {
               name
               description
@@ -35,8 +34,7 @@ jobs:
               }
             }
           }
-          EOF
-          )" >> $GITHUB_ENV
+          )
           
       - name: Send GraphQL query
         run: |
