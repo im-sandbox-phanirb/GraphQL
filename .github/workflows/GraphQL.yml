@@ -16,7 +16,7 @@ jobs:
       - name: Set up environment variables
         run: |
           QUERY=$(query {
-            repository(owner: \${{ inputs.org-name }}, name: \${{ inputs.repo-name }}) {
+            repository(owner: "im-sandbox-phanirb", name: "logs-2") {
               name
               description
               homepageUrl
