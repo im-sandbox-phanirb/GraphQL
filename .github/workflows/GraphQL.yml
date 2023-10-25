@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Set up environment variables
         run: |
-          QUERY=$(query {
+          QUERY=`query {
             repository(owner: "im-sandbox-phanirb", name: "logs-2") {
               name
               description
@@ -34,7 +34,7 @@ jobs:
               }
             }
           }
-          )
+          `
           
       - name: Send GraphQL query
         run: |
