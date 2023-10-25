@@ -13,29 +13,35 @@ jobs:
   graph-ql:
     runs-on: ubuntu-latest
     steps:
-      - name: graph ql 
+      - name: Set up environment variables
         run: |
-          QUERY=$(query {
-              repository(owner: ${{ inputs.org-name }}, name: ${{ inputs.repo-name }}) {
+          echo "QUERY=$(cat <<EOF
+          query {
+            repository(owner: \${{ inputs.org-name }}, name: \${{ inputs.repo-name }}) {
+              name
+              description
+              homepageUrl
+              hasIssuesEnabled
+              hasWikiEnabled
+              hasProjectsEnabled
+              isArchived
+              isTemplate
+              licenseInfo {
                 name
-                description
-                homepageUrl
-                hasIssuesEnabled
-                hasWikiEnabled
-                hasProjectsEnabled
-                isArchived
-                isTemplate
-                licenseInfo {
-                  name
-                  spdxId
-                }
-                defaultBranchRef {
-                  name
-                }
+                spdxId
               }
-            })
-
-          curl -X POST -H "Authorization: bearer ${{ secrets.MY_SECRETS }}" -d "$QUERY" https://api.github.com/graphql
-        
-    
-  
+              defaultBranchRef {
+                name
+              }
+            }
+          }
+          EOF
+          )" >> $GITHUB_ENV
+          
+      - name: Send GraphQL query
+        run: |
+          curl -X POST \
+            -H "Authorization: bearer ${{ secrets.MY_SECRETS }}" \
+            -H "Content-Type: application/json" \
+            -d "$QUERY" \
+            https://api.github.com/graphql
